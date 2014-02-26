@@ -1,0 +1,9 @@
+{
+  "packages": {
+    "connection-banner": {
+      "path": "../"
+    },
+    "font-awesome": {},
+    "bootstrap-3": {}
+  }
+}

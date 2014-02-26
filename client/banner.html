@@ -1,0 +1,17 @@
+<template name="meteorConnectionBanner">
+	{{#if wasConnected}}
+		{{#if isDisconnected}}
+			<div id="meteor-connection-lost-banner" class="alert alert-danger">
+				<b><i class="fa fa-exclamation-triangle fa-lg"></i> Connection to Server Lost!</b>
+				&nbsp;&nbsp;
+				Automaticaly attempting to reconnect in {{#isolate}}{{retryTimeSeconds}}{{/isolate}} seconds.
+				&nbsp;&nbsp;
+				<a href="#" id="meteor-connection-try-reconnect" class="alert-link"><i class="fa fa-refresh fa-lg"></i> Click to try reconnecting now</a>
+				{{#if failedReason}}
+					<br>
+					{{failedReason}}
+				{{/if}}
+			</div>
+		{{/if}}
+	{{/if}}
+</template>

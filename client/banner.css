@@ -1,0 +1,11 @@
+#meteor-connection-lost-banner {
+	position: fixed;
+	z-index: 100;
+	text-align: center;
+	vertical-align: baseline;
+	width: 100%;
+	top: 0;
+	padding-top:10px;
+	padding-bottom:10px;
+	border-radius: 0px;
+}
