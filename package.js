@@ -7,8 +7,6 @@ Package.on_use(function (api) {
   api.use([
     'deps',
     'templating',
-    'handlebars',
-    'spark',
     'session']
   , 'client');
 

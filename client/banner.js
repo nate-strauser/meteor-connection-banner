@@ -1,13 +1,12 @@
-
 Meteor.startup(function(){
-	Template.meteorConnectionBanner.events({
-		'click #meteor-connection-try-reconnect': function(event, template){
+	Template.connectionBanner.events({
+		'click #connection-try-reconnect': function(event, template){
 			event.preventDefault();
 			Meteor.reconnect();
 		}
 	});
 
-	Template.meteorConnectionBanner.helpers({
+	Template.connectionBanner.helpers({
 		'wasConnected': function(event, template){
 			return Session.equals('MeteorConnection-wasConnected', true);
 		},
@@ -20,10 +19,6 @@ Meteor.startup(function(){
 		'failedReason': function(event, template){
 			return Session.get('MeteorConnection-failedReason');
 		}
-	});
-
-	Handlebars.registerHelper("connectionBanner", function() {
-		return new Handlebars.SafeString(Template.meteorConnectionBanner());
 	});
 
 	Session.setDefault('MeteorConnection-isConnected', true);
@@ -41,7 +36,7 @@ Meteor.startup(function(){
 			Session.set('MeteorConnection-failedReason', null);
 		}else{
 			if(Session.equals('MeteorConnection-wasConnected', true)){
-					connectionRetryUpdateInterval = Meteor.setInterval(function(){
+				connectionRetryUpdateInterval = Meteor.setInterval(function(){
 					var retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
 					if(isNaN(retryIn))
 						retryIn = 0;
