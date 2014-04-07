@@ -1,6 +1,6 @@
-#meteor-connection-lost-banner {
+#connection-lost-banner {
 	position: fixed;
-	z-index: 100;
+	z-index: 2000;
 	text-align: center;
 	vertical-align: baseline;
 	width: 100%;
