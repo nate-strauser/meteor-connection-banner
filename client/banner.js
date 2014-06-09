@@ -32,17 +32,20 @@ Meteor.startup(function(){
 		if(isConnected){
 			Session.set('MeteorConnection-wasConnected', true);
 			Meteor.clearInterval(connectionRetryUpdateInterval);
+			connectionRetryUpdateInterval = undefined;
 			Session.set('MeteorConnection-retryTimeSeconds', 0);
 			Session.set('MeteorConnection-failedReason', null);
 		}else{
 			if(Session.equals('MeteorConnection-wasConnected', true)){
-				connectionRetryUpdateInterval = Meteor.setInterval(function(){
-					var retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
-					if(isNaN(retryIn))
-						retryIn = 0;
-					Session.set('MeteorConnection-retryTimeSeconds', retryIn);
-					Session.set('MeteorConnection-failedReason', Meteor.status().reason);
-				},500);
+				if(!connectionRetryUpdateInterval)
+					connectionRetryUpdateInterval = Meteor.setInterval(function(){
+						console.log('running interval');
+						var retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
+						if(isNaN(retryIn))
+							retryIn = 0;
+						Session.set('MeteorConnection-retryTimeSeconds', retryIn);
+						Session.set('MeteorConnection-failedReason', Meteor.status().reason);
+					},500);
 			}
 		}
 		Session.set('MeteorConnection-isConnected', isConnected);
