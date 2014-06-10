@@ -48,6 +48,9 @@ And insert the template either directly before or after the navbar div, e.g.:
 
 ## Version History
 
+###v0.3
+* Eliminated extra update intervals, just 1 interval at any time now
+
 ###v0.2
 * Adjustments to be blaze compatible
 * Renamed some element IDs
