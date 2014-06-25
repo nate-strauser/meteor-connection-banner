@@ -22,9 +22,9 @@ Element IDs can be used to directly style the banner if needed `#connection-lost
 
 ----
 
-## Customizing banner text
+## Customizing Banner Text
 
-The connection banner will attempt to fetch custom text from `Meteor.settings`.  If any value is not set, the default value for that text will be used.
+The connection banner will attempt to fetch custom text from `Meteor.settings`.  If any value is not set, the default value for that text will be used.  Below are example settings which cover all of the text in the banner.
 
 ```
 {
