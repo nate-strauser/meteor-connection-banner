@@ -2,11 +2,11 @@
 	{{#if wasConnected}}
 		{{#if isDisconnected}}
 			<div id="connection-lost-banner" class="alert alert-danger">
-				<b><i class="fa fa-exclamation-triangle fa-lg"></i> Connection to Server Lost!</b>
+				<b><i class="fa fa-exclamation-triangle fa-lg"></i> {{connectionLostText}}</b>
 				&nbsp;&nbsp;
-				Automaticaly attempting to reconnect in {{retryTimeSeconds}} seconds.
+				{{reconnectBeforeCountdownText}} {{retryTimeSeconds}} {{reconnectAfterCountdownText}}
 				&nbsp;&nbsp;
-				<a href="#" id="connection-try-reconnect" class="alert-link"><i class="fa fa-refresh fa-lg"></i> Click to try reconnecting now</a>
+				<a href="#" id="connection-try-reconnect" class="alert-link"><i class="fa fa-refresh fa-lg"></i> {{tryReconnectText}}</a>
 				{{#if failedReason}}
 					<br>
 					{{failedReason}}

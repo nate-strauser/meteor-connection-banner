@@ -6,7 +6,6 @@
 standard-app-packages
 autopublish
 insecure
-preserve-inputs
 connection-banner
 font-awesome
 bootstrap-3

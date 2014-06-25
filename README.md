@@ -22,6 +22,27 @@ Element IDs can be used to directly style the banner if needed `#connection-lost
 
 ----
 
+## Customizing banner text
+
+The connection banner will attempt to fetch custom text from `Meteor.settings`.  If any value is not set, the default value for that text will be used.
+
+```
+{
+	"public":{
+		"connectionBanner":{
+			"connectionLostText":"Ooops. Something is wrong.",
+			"tryReconnectText":"Try to reconnect now",
+			"reconnectBeforeCountdownText":"Attempting to reconnect in",
+			"reconnectAfterCountdownText":"seconds."
+		}
+	}
+}
+```
+** Settings are only required if you desire customized text **
+
+
+----
+
 ####Using with a Bootstrap Fixed Top Navbar
 
 If you have a fixed navbar at the top of the page, the connectionBanner will render invisibly behind it. You can use the following CSS to move the navbar down if the banner is rendered (or appear below the navbar).
@@ -47,6 +68,10 @@ And insert the template either directly before or after the navbar div, e.g.:
 -----
 
 ## Version History
+
+###v0.4
+* Fixed a typo in default text
+* Text can now be cusomtized via `Meteor.settings`
 
 ###v0.3
 * Eliminated extra update intervals, just 1 interval at any time now

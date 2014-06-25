@@ -18,6 +18,34 @@ Meteor.startup(function(){
 		},
 		'failedReason': function(event, template){
 			return Session.get('MeteorConnection-failedReason');
+		},
+		'connectionLostText': function(event, template){
+			var defaultText = "Connection to Server Lost!";
+			if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.connectionBanner && Meteor.settings.public.connectionBanner.connectionLostText)
+				return Meteor.settings.public.connectionBanner.connectionLostText;
+			else
+				return defaultText;
+		},
+		'tryReconnectText': function(event, template){
+			var defaultText = "Click to try reconnecting now";
+			if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.connectionBanner && Meteor.settings.public.connectionBanner.tryReconnectText)
+				return Meteor.settings.public.connectionBanner.tryReconnectText;
+			else
+				return defaultText;
+		},
+		'reconnectBeforeCountdownText': function(event, template){
+			var defaultText = "Automatically attempting to reconnect in";
+			if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.connectionBanner && Meteor.settings.public.connectionBanner.reconnectBeforeCountdownText)
+				return Meteor.settings.public.connectionBanner.reconnectBeforeCountdownText;
+			else
+				return defaultText;
+		},
+		'reconnectAfterCountdownText': function(event, template){
+			var defaultText = "seconds.";
+			if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.connectionBanner && Meteor.settings.public.connectionBanner.reconnectAfterCountdownText)
+				return Meteor.settings.public.connectionBanner.reconnectAfterCountdownText;
+			else
+				return defaultText;
 		}
 	});
 
