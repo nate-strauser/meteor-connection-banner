@@ -38,7 +38,7 @@ The connection banner will attempt to fetch custom text from `Meteor.settings`. 
 	}
 }
 ```
-** Settings are only required if you desire customized text **
+Settings are only required if you desire customized text
 
 
 ----
@@ -47,16 +47,16 @@ The connection banner will attempt to fetch custom text from `Meteor.settings`. 
 
 If you have a fixed navbar at the top of the page, the connectionBanner will render invisibly behind it. You can use the following CSS to move the navbar down if the banner is rendered (or appear below the navbar).
 ```
-#connection-lost-banner + div.navbar-fixed-top,
-#connection-try-reconnect + div.navbar-fixed-top {
+#connection-lost-banner + .navbar-fixed-top,
+#connection-try-reconnect + .navbar-fixed-top {
     top: 41px;
 }
-div.navbar-fixed-top + #connection-lost-banner,
-div.navbar-fixed-top + #connection-try-reconnect {
+.navbar-fixed-top + #connection-lost-banner,
+.navbar-fixed-top + #connection-try-reconnect {
     top: 51px;
 }
 ```
-And insert the template either directly before or after the navbar div, e.g.:
+And insert the template either directly before or after the navbar element, e.g.:
 ```
 {{>connectionBanner}}
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
