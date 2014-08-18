@@ -3,7 +3,7 @@
     "description": "A banner that displays when meteor server is disconnected with countdown and reconnect option",
     "homepage": "https://github.com/nate-strauser/meteor-connection-banner",
     "author": "Nate Strauser",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "git": "https://github.com/nate-strauser/meteor-connection-banner.git",
     "packages": {}
 }

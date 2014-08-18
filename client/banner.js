@@ -67,7 +67,6 @@ Meteor.startup(function(){
 			if(Session.equals('MeteorConnection-wasConnected', true)){
 				if(!connectionRetryUpdateInterval)
 					connectionRetryUpdateInterval = Meteor.setInterval(function(){
-						console.log('running interval');
 						var retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
 						if(isNaN(retryIn))
 							retryIn = 0;
