@@ -1,12 +1,12 @@
-var isConnected = new ReactiveVar(true);
-var wasConnected = new ReactiveVar(false);
-var retryTimeSeconds = new ReactiveVar(0);
-var failedReason = new ReactiveVar(null);
+const isConnected = new ReactiveVar(true);
+const wasConnected = new ReactiveVar(false);
+const retryTimeSeconds = new ReactiveVar(0);
+const failedReason = new ReactiveVar(null);
 
 Meteor.startup(function () {
 	Deps.autorun(function () {
-		var connectionRetryUpdateInterval;
-		var connectedStatus = Meteor.status().connected;
+		let connectionRetryUpdateInterval;
+		const connectedStatus = Meteor.status().connected;
 
 		if (connectedStatus) {
 			wasConnected.set(true);
@@ -15,16 +15,18 @@ Meteor.startup(function () {
 			retryTimeSeconds.set(0);
 			failedReason.set(null);
 		} else {
-			if (wasConnected.get()){
-				if (!connectionRetryUpdateInterval)
+			if (wasConnected.get()) {
+				if (!connectionRetryUpdateInterval) {
 					connectionRetryUpdateInterval = Meteor.setInterval(function () {
-						var retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
-						if (isNaN(retryIn)) {
+						let retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
+
+						if (isNaN(retryIn))
 							retryIn = 0;
-						}
+
 						retryTimeSeconds.set(retryIn);
 						failedReason.set(Meteor.status().reason);
 					}, 500);
+				}
 			}
 		}
 		isConnected.set(connectedStatus);
@@ -32,41 +34,39 @@ Meteor.startup(function () {
 });
 
 Template.connectionBanner.events({
-	'click #connection-try-reconnect': function (event, template) {
+	'click #connection-try-reconnect'(event) {
 		event.preventDefault();
 		Meteor.reconnect();
 	}
 });
 
-var getSetting = function (key, defaultText) {
-	if (checkObjHasKeys(Meteor, ['settings', 'public', 'connectionBanner', key])) {
+const getSetting = function (key, defaultText) {
+	if (checkObjHasKeys(Meteor, ['settings', 'public', 'connectionBanner', key]))
 		return Meteor.settings.public.connectionBanner[key];
-	}
-	else {
-		return defaultText;
-	}
+
+	return defaultText;
 };
 
 Template.connectionBanner.helpers({
-	showBanner: function () {
+	showBanner() {
 		return wasConnected.get() && !isConnected.get();
 	},
-	retryTimeSeconds: function () {
+	retryTimeSeconds() {
 		return retryTimeSeconds.get();
 	},
-	failedReason: function () {
+	failedReason() {
 		return failedReason.get();
 	},
-	connectionLostText: function () {
+	connectionLostText() {
 		return getSetting('connectionLostText', 'Connection to Server Lost!');
 	},
-	tryReconnectText: function () {
+	tryReconnectText() {
 		return getSetting('tryReconnectText', 'Click to try reconnecting now');
 	},
-	reconnectBeforeCountdownText: function () {
+	reconnectBeforeCountdownText() {
 		return getSetting('reconnectBeforeCountdownText', 'Automatically attempting to reconnect in');
 	},
-	reconnectAfterCountdownText: function () {
+	reconnectAfterCountdownText() {
 		return getSetting('reconnectAfterCountdownText', 'seconds.');
 	}
 });
