@@ -4,7 +4,7 @@ const retryTimeSeconds = new ReactiveVar(0);
 const failedReason = new ReactiveVar(null);
 
 Meteor.startup(function () {
-	Deps.autorun(function () {
+	Tracker.autorun(function () {
 		let connectionRetryUpdateInterval;
 		const connectedStatus = Meteor.status().connected;
 
@@ -14,21 +14,18 @@ Meteor.startup(function () {
 			connectionRetryUpdateInterval = undefined;
 			retryTimeSeconds.set(0);
 			failedReason.set(null);
-		} else {
-			if (wasConnected.get()) {
-				if (!connectionRetryUpdateInterval) {
-					connectionRetryUpdateInterval = Meteor.setInterval(function () {
-						let retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
+		} else if (wasConnected.get() && !connectionRetryUpdateInterval) {
+			connectionRetryUpdateInterval = Meteor.setInterval(function () {
+				let retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
 
-						if (isNaN(retryIn))
-							retryIn = 0;
+				if (isNaN(retryIn))
+					retryIn = 0;
 
-						retryTimeSeconds.set(retryIn);
-						failedReason.set(Meteor.status().reason);
-					}, 500);
-				}
-			}
+				retryTimeSeconds.set(retryIn);
+				failedReason.set(Meteor.status().reason);
+			}, 500);
 		}
+
 		isConnected.set(connectedStatus);
 	});
 });
