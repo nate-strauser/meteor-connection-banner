@@ -68,6 +68,12 @@ And insert the template either directly before or after the navbar element, e.g.
 -----
 
 ## Version History
+###v0.5.2
+* Better background loading of font awesome icons
+
+###v0.5.1
+* Upgraded example to Meteor 1.4
+
 ###v0.5
 * Ported to Meteor 1.0
 * Replaced all session variables with reactiveVars

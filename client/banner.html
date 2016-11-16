@@ -1,7 +1,9 @@
 <template name="connectionBanner">
 	<!-- ensure that font-awesome loads -->
-	<i style="display:none" class="fa fa-refresh fa-lg"></i>
-	<i style="display:none" class="fa fa-exclamation-triangle fa-lg"></i>
+	<div style="height:0px;width:0px;overflow:hidden;">
+		<i class="fa fa-refresh fa-lg"></i>
+		<i class="fa fa-exclamation-triangle fa-lg"></i>
+	</div>
 	{{#if showBanner}}
 		<div id="connection-lost-banner" class="alert alert-danger">
 			<b><i class="fa fa-exclamation-triangle fa-lg"></i> {{connectionLostText}}</b>
