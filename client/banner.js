@@ -46,7 +46,7 @@ const getSetting = function (key, defaultText) {
 
 Template.connectionBanner.helpers({
 	showBanner() {
-		return wasConnected.get() && !isConnected.get();
+		return wasConnected.get() && !isConnected.get() && Meteor.status().retryCount > 2;
 	},
 	retryTimeSeconds() {
 		return retryTimeSeconds.get();

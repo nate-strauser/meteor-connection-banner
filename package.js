@@ -1,7 +1,7 @@
 Package.describe({
     summary: "A banner that displays when meteor server is disconnected with countdown and reconnect option",
     name: "maxharris9:connection-banner",
-    version: "0.5.0",
+    version: "0.5.1",
     git: "https://github.com/nate-strauser/meteor-connection-banner.git"
 });
 
