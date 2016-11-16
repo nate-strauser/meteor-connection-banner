@@ -1,10 +1,10 @@
 {
-	"public":{
-		"connectionBanner":{
-			"connectionLostText":"Ooops. Something is wrong.",
-			"tryReconnectText":"Try to reconnect now",
-			"reconnectBeforeCountdownText":"Attempting to reconnect in",
-			"reconnectAfterCountdownText":"seconds."
+	"public": {
+		"connectionBanner": {
+			"connectionLostText": "Ooops. Something is wrong.",
+			"tryReconnectText": "Try to reconnect now",
+			"reconnectBeforeCountdownText": "Attempting to reconnect in",
+			"reconnectAfterCountdownText": "seconds."
 		}
 	}
 }

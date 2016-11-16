@@ -1,81 +1,72 @@
-Meteor.startup(function(){
-	Template.connectionBanner.events({
-		'click #connection-try-reconnect': function(event, template){
-			event.preventDefault();
-			Meteor.reconnect();
-		}
-	});
+var isConnected = new ReactiveVar(true);
+var wasConnected = new ReactiveVar(false);
+var retryTimeSeconds = new ReactiveVar(0);
+var failedReason = new ReactiveVar(null);
 
-	Template.connectionBanner.helpers({
-		'wasConnected': function(event, template){
-			return Session.equals('MeteorConnection-wasConnected', true);
-		},
-		'isDisconnected': function(event, template){
-			return Session.equals('MeteorConnection-isConnected', false);
-		},
-		'retryTimeSeconds': function(event, template){
-			return Session.get('MeteorConnection-retryTimeSeconds');
-		},
-		'failedReason': function(event, template){
-			return Session.get('MeteorConnection-failedReason');
-		},
-		'connectionLostText': function(event, template){
-			var defaultText = "Connection to Server Lost!";
-			if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.connectionBanner && Meteor.settings.public.connectionBanner.connectionLostText)
-				return Meteor.settings.public.connectionBanner.connectionLostText;
-			else
-				return defaultText;
-		},
-		'tryReconnectText': function(event, template){
-			var defaultText = "Click to try reconnecting now";
-			if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.connectionBanner && Meteor.settings.public.connectionBanner.tryReconnectText)
-				return Meteor.settings.public.connectionBanner.tryReconnectText;
-			else
-				return defaultText;
-		},
-		'reconnectBeforeCountdownText': function(event, template){
-			var defaultText = "Automatically attempting to reconnect in";
-			if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.connectionBanner && Meteor.settings.public.connectionBanner.reconnectBeforeCountdownText)
-				return Meteor.settings.public.connectionBanner.reconnectBeforeCountdownText;
-			else
-				return defaultText;
-		},
-		'reconnectAfterCountdownText': function(event, template){
-			var defaultText = "seconds.";
-			if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.connectionBanner && Meteor.settings.public.connectionBanner.reconnectAfterCountdownText)
-				return Meteor.settings.public.connectionBanner.reconnectAfterCountdownText;
-			else
-				return defaultText;
-		}
-	});
+Meteor.startup(function () {
+	Deps.autorun(function () {
+		var connectionRetryUpdateInterval;
+		var connectedStatus = Meteor.status().connected;
 
-	Session.setDefault('MeteorConnection-isConnected', true);
-	Session.setDefault('MeteorConnection-wasConnected', false);
-	Session.setDefault('MeteorConnection-retryTimeSeconds', 0);
-	Session.setDefault('MeteorConnection-failedReason', null);
-	var connectionRetryUpdateInterval;
-
-	Deps.autorun(function(){
-		var isConnected = Meteor.status().connected;
-		if(isConnected){
-			Session.set('MeteorConnection-wasConnected', true);
+		if (connectedStatus) {
+			wasConnected.set(true);
 			Meteor.clearInterval(connectionRetryUpdateInterval);
 			connectionRetryUpdateInterval = undefined;
-			Session.set('MeteorConnection-retryTimeSeconds', 0);
-			Session.set('MeteorConnection-failedReason', null);
-		}else{
-			if(Session.equals('MeteorConnection-wasConnected', true)){
-				if(!connectionRetryUpdateInterval)
-					connectionRetryUpdateInterval = Meteor.setInterval(function(){
+			retryTimeSeconds.set(0);
+			failedReason.set(null);
+		} else {
+			if (wasConnected.get()){
+				if (!connectionRetryUpdateInterval)
+					connectionRetryUpdateInterval = Meteor.setInterval(function () {
 						var retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
-						if(isNaN(retryIn))
+						if (isNaN(retryIn)) {
 							retryIn = 0;
-						Session.set('MeteorConnection-retryTimeSeconds', retryIn);
-						Session.set('MeteorConnection-failedReason', Meteor.status().reason);
-					},500);
+						}
+						retryTimeSeconds.set(retryIn);
+						failedReason.set(Meteor.status().reason);
+					}, 500);
 			}
 		}
-		Session.set('MeteorConnection-isConnected', isConnected);
+		isConnected.set(connectedStatus);
 	});
 });
-	
+
+Template.connectionBanner.events({
+	'click #connection-try-reconnect': function (event, template) {
+		event.preventDefault();
+		Meteor.reconnect();
+	}
+});
+
+var getSetting = function (key, defaultText) {
+	if (checkObjHasKeys(Meteor, ['settings', 'public', 'connectionBanner', key])) {
+		return Meteor.settings.public.connectionBanner[key];
+	}
+	else {
+		return defaultText;
+	}
+};
+
+Template.connectionBanner.helpers({
+	showBanner: function () {
+		return wasConnected.get() && !isConnected.get();
+	},
+	retryTimeSeconds: function () {
+		return retryTimeSeconds.get();
+	},
+	failedReason: function () {
+		return failedReason.get();
+	},
+	connectionLostText: function () {
+		return getSetting('connectionLostText', 'Connection to Server Lost!');
+	},
+	tryReconnectText: function () {
+		return getSetting('tryReconnectText', 'Click to try reconnecting now');
+	},
+	reconnectBeforeCountdownText: function () {
+		return getSetting('reconnectBeforeCountdownText', 'Automatically attempting to reconnect in');
+	},
+	reconnectAfterCountdownText: function () {
+		return getSetting('reconnectAfterCountdownText', 'seconds.');
+	}
+});
