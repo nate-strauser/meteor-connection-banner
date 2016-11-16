@@ -1,12 +1,13 @@
-var isConnected = new ReactiveVar(true);
-var wasConnected = new ReactiveVar(false);
-var retryTimeSeconds = new ReactiveVar(0);
-var failedReason = new ReactiveVar(null);
+const isConnected = new ReactiveVar(true);
+const wasConnected = new ReactiveVar(false);
+const retryTimeSeconds = new ReactiveVar(0);
+const failedReason = new ReactiveVar(null);
+
+let connectionRetryUpdateInterval;
 
 Meteor.startup(function () {
-	Deps.autorun(function () {
-		var connectionRetryUpdateInterval;
-		var connectedStatus = Meteor.status().connected;
+	Tracker.autorun(function () {
+		const connectedStatus = Meteor.status().connected;
 
 		if (connectedStatus) {
 			wasConnected.set(true);
@@ -14,59 +15,56 @@ Meteor.startup(function () {
 			connectionRetryUpdateInterval = undefined;
 			retryTimeSeconds.set(0);
 			failedReason.set(null);
-		} else {
-			if (wasConnected.get()){
-				if (!connectionRetryUpdateInterval)
-					connectionRetryUpdateInterval = Meteor.setInterval(function () {
-						var retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
-						if (isNaN(retryIn)) {
-							retryIn = 0;
-						}
-						retryTimeSeconds.set(retryIn);
-						failedReason.set(Meteor.status().reason);
-					}, 500);
-			}
+		} else if (wasConnected.get() && !connectionRetryUpdateInterval) {
+			connectionRetryUpdateInterval = Meteor.setInterval(function () {
+				let retryIn = Math.round((Meteor.status().retryTime - (new Date()).getTime())/1000);
+
+				if (isNaN(retryIn))
+					retryIn = 0;
+
+				retryTimeSeconds.set(retryIn);
+				failedReason.set(Meteor.status().reason);
+			}, 500);
 		}
+
 		isConnected.set(connectedStatus);
 	});
 });
 
 Template.connectionBanner.events({
-	'click #connection-try-reconnect': function (event, template) {
+	'click #connection-try-reconnect'(event) {
 		event.preventDefault();
 		Meteor.reconnect();
 	}
 });
 
-var getSetting = function (key, defaultText) {
-	if (checkObjHasKeys(Meteor, ['settings', 'public', 'connectionBanner', key])) {
+const getSetting = function (key, defaultText) {
+	if (checkObjHasKeys(Meteor, ['settings', 'public', 'connectionBanner', key]))
 		return Meteor.settings.public.connectionBanner[key];
-	}
-	else {
-		return defaultText;
-	}
+
+	return defaultText;
 };
 
 Template.connectionBanner.helpers({
-	showBanner: function () {
-		return wasConnected.get() && !isConnected.get();
+	showBanner() {
+		return wasConnected.get() && !isConnected.get() && Meteor.status().retryCount > 2;
 	},
-	retryTimeSeconds: function () {
+	retryTimeSeconds() {
 		return retryTimeSeconds.get();
 	},
-	failedReason: function () {
+	failedReason() {
 		return failedReason.get();
 	},
-	connectionLostText: function () {
+	connectionLostText() {
 		return getSetting('connectionLostText', 'Connection to Server Lost!');
 	},
-	tryReconnectText: function () {
+	tryReconnectText() {
 		return getSetting('tryReconnectText', 'Click to try reconnecting now');
 	},
-	reconnectBeforeCountdownText: function () {
+	reconnectBeforeCountdownText() {
 		return getSetting('reconnectBeforeCountdownText', 'Automatically attempting to reconnect in');
 	},
-	reconnectAfterCountdownText: function () {
+	reconnectAfterCountdownText() {
 		return getSetting('reconnectAfterCountdownText', 'seconds.');
 	}
 });
