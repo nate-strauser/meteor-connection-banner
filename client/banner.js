@@ -3,9 +3,10 @@ const wasConnected = new ReactiveVar(false);
 const retryTimeSeconds = new ReactiveVar(0);
 const failedReason = new ReactiveVar(null);
 
+let connectionRetryUpdateInterval;
+
 Meteor.startup(function () {
 	Tracker.autorun(function () {
-		let connectionRetryUpdateInterval;
 		const connectedStatus = Meteor.status().connected;
 
 		if (connectedStatus) {
