@@ -66,5 +66,11 @@ Template.connectionBanner.helpers({
 	},
 	reconnectAfterCountdownText() {
 		return getSetting('reconnectAfterCountdownText', 'seconds.');
-	}
+	},
+	connectionLostTextIcon() {
+		return getSetting('connectionLostTextIcon', 'fa fa-exclamation-triangle fa-lg');
+	},
+	tryReconnectTextIcon() {
+		return getSetting('tryReconnectTextIcon', 'fa fa-refresh fa-lg');
+	},
 });
