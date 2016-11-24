@@ -33,12 +33,14 @@ The connection banner will attempt to fetch custom text from `Meteor.settings`. 
 			"connectionLostText":"Ooops. Something is wrong.",
 			"tryReconnectText":"Try to reconnect now",
 			"reconnectBeforeCountdownText":"Attempting to reconnect in",
-			"reconnectAfterCountdownText":"seconds."
+			"reconnectAfterCountdownText":"seconds.",
+      "connectionLostTextIcon":"fa fa-exclamation-triangle fa-lg",
+      "tryReconnectTextIcon":"fa fa-refresh fa-lg"
 		}
 	}
 }
 ```
-Settings are only required if you desire customized text
+Settings are only required if you desire customized text and icons
 
 
 ----

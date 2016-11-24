@@ -6,11 +6,11 @@
 	</div>
 	{{#if showBanner}}
 		<div id="connection-lost-banner" class="alert alert-danger">
-			<b><i class="fa fa-exclamation-triangle fa-lg"></i> {{connectionLostText}}</b>
+			<b><i class="{{connectionLostTextIcon}}"></i> {{connectionLostText}}</b>
 			&nbsp;
 			{{reconnectBeforeCountdownText}} {{retryTimeSeconds}} {{reconnectAfterCountdownText}}
 			&nbsp;
-			<a href="" id="connection-try-reconnect" class="alert-link"><i class="fa fa-refresh fa-lg"></i> {{tryReconnectText}}</a>
+			<a href="" id="connection-try-reconnect" class="alert-link"><i class="{{tryReconnectTextIcon}}"></i> {{tryReconnectText}}</a>
 			{{#if failedReason}}
 				<br>
 				{{failedReason}}
