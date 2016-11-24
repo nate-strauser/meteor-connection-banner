@@ -34,8 +34,8 @@ The connection banner will attempt to fetch custom text from `Meteor.settings`. 
 			"tryReconnectText":"Try to reconnect now",
 			"reconnectBeforeCountdownText":"Attempting to reconnect in",
 			"reconnectAfterCountdownText":"seconds.",
-      "connectionLostTextIcon":"fa fa-exclamation-triangle fa-lg",
-      "tryReconnectTextIcon":"fa fa-refresh fa-lg"
+        "connectionLostTextIcon":"fa fa-exclamation-triangle fa-lg",
+        "tryReconnectTextIcon":"fa fa-refresh fa-lg"
 		}
 	}
 }
